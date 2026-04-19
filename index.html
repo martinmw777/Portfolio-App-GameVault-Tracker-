@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GameVault Tracker</title>
+  <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;600;700;800&display=swap');
+
+    body {
+      background: linear-gradient(180deg, #081220 0%, #10233e 100%);
+      color: #f1e2b8;
+      font-family: 'Nunito', sans-serif;
+    }
+
+    .navbar {
+      background: linear-gradient(90deg, #0b1730, #14325a) !important;
+      border-bottom: 4px solid #d4b06a;
+    }
+
+    .navbar-brand,
+    .nav-link {
+      color: #f7e6b5 !important;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+    }
+
+    .nav-link:hover {
+      color: #ffcf66 !important;
+    }
+
+    .navbar-brand {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 1rem;
+    }
+
+    .hero-banner {
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.12) 0, rgba(255,255,255,0) 30%),
+        linear-gradient(135deg, #0b1730 0%, #14325a 55%, #d4b06a 100%);
+      color: #f7e6b5;
+      border-bottom: 5px solid #d4b06a;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-banner::after {
+      content: "";
+      position: absolute;
+      inset: auto -10% -35px -10%;
+      height: 70px;
+      background: repeating-linear-gradient(
+        -45deg,
+        rgba(255,255,255,0.08) 0,
+        rgba(255,255,255,0.08) 12px,
+        rgba(255,255,255,0.02) 12px,
+        rgba(255,255,255,0.02) 24px
+      );
+    }
+
+    .hero-title {
+      font-family: 'Press Start 2P', cursive;
+      font-size: clamp(1.6rem, 3vw, 2.8rem);
+      line-height: 1.4;
+      text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.28);
+    }
+
+    .hero-banner p {
+      text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.18);
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .retro-chip {
+      display: inline-block;
+      background: #b22222;
+      color: #f7e6b5;
+      border: 3px solid #f7e6b5;
+      border-radius: 999px;
+      padding: 0.5rem 1rem;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      box-shadow: 0 4px 0 rgba(0,0,0,0.18);
+      margin-bottom: 1rem;
+    }
+
+    .btn-primary {
+      background-color: #b22222;
+      border-color: #b22222;
+      border-radius: 999px;
+      font-weight: 800;
+      padding: 0.7rem 1.4rem;
+      box-shadow: 0 5px 0 #7f1717;
+    }
+
+    .btn-primary:hover {
+      background-color: #8f1b1b;
+      border-color: #8f1b1b;
+    }
+
+    .btn-info {
+      background-color: #d4b06a;
+      border-color: #d4b06a;
+      color: #0b1730;
+      border-radius: 999px;
+      font-weight: 800;
+      box-shadow: 0 4px 0 #a78646;
+    }
+
+    .btn-info:hover {
+      background-color: #c19d57;
+      border-color: #c19d57;
+      color: #0b1730;
+    }
+
+    .btn-danger {
+      border-radius: 999px;
+      font-weight: 800;
+      box-shadow: 0 4px 0 rgba(0,0,0,0.12);
+    }
+
+    .btn-outline-secondary,
+    .btn-outline-dark,
+    .btn-outline-light {
+      border-radius: 999px;
+      font-weight: 800;
+      color: #f7e6b5;
+      border-color: #d4b06a;
+    }
+
+    .btn-outline-secondary:hover,
+    .btn-outline-dark:hover,
+    .btn-outline-light:hover {
+      background-color: #d4b06a;
+      color: #0b1730;
+      border-color: #d4b06a;
+    }
+
+    .carousel-shell {
+      border-radius: 22px;
+      overflow: hidden;
+      border: 4px solid #d4b06a;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    .carousel-item img {
+      width: 100%;
+      height: 420px;
+      object-fit: cover;
+    }
+
+    .carousel-caption {
+      background: rgba(11, 23, 48, 0.72);
+      border: 2px solid #d4b06a;
+      border-radius: 16px;
+      padding: 1rem 1.25rem;
+      bottom: 1.5rem;
+    }
+
+    .carousel-caption h5 {
+      font-weight: 800;
+      color: #f7e6b5;
+    }
+
+    .carousel-caption p {
+      margin-bottom: 0;
+      color: #f7e6b5;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .section-title {
+      font-family: 'Press Start 2P', cursive;
+      font-size: clamp(1rem, 2vw, 1.4rem);
+      line-height: 1.8;
+      color: #f7e6b5;
+    }
+
+    .section-title span {
+      height: 8px;
+      width: 96px;
+      margin: 0 auto;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #b22222, #d4b06a, #f7e6b5);
+      box-shadow: 0 3px 0 rgba(0,0,0,0.18);
+    }
+
+    .card {
+      border: 3px solid #d4b06a;
+      border-radius: 22px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      background-color: #10233e;
+      overflow: hidden;
+      box-shadow: 0 8px 0 rgba(0, 0, 0, 0.14);
+      color: #f7e6b5;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.22);
+    }
+
+    .game-cover {
+      height: 220px;
+      object-fit: cover;
+    }
+
+    .card-title {
+      font-weight: 800;
+    }
+
+    .badge {
+      border-radius: 999px;
+      padding: 0.45em 0.8em;
+      font-size: 0.75rem;
+      vertical-align: middle;
+    }
+
+    .progress {
+      height: 1.45rem;
+      border-radius: 999px;
+      background-color: #d8d8d8;
+      overflow: hidden;
+      border: 2px solid #b89a5b;
+    }
+
+    .progress-bar {
+      font-weight: 800;
+    }
+
+    .panel-card {
+      border: 3px solid #d4b06a;
+      border-radius: 24px;
+      background: #10233e;
+      box-shadow: 0 10px 0 rgba(0, 0, 0, 0.14);
+      color: #f7e6b5;
+    }
+
+    .modal-content {
+      border: 3px solid #d4b06a;
+      border-radius: 22px;
+      overflow: hidden;
+      background-color: #10233e;
+      color: #f7e6b5;
+    }
+
+    .modal-header {
+      background: linear-gradient(90deg, #0b1730, #b22222);
+      color: #f7e6b5;
+    }
+
+    .toast {
+      border: 2px solid #d4b06a;
+      border-radius: 18px;
+      overflow: hidden;
+      background-color: #10233e;
+      color: #f7e6b5;
+    }
+
+    .toast-header {
+      background-color: #0b1730;
+      color: #f7e6b5;
+      font-weight: 800;
+    }
+
+    .accordion-item {
+      border: 3px solid #d4b06a;
+      border-radius: 18px !important;
+      overflow: hidden;
+      background-color: #10233e;
+      margin-bottom: 1rem;
+    }
+
+    .accordion-button {
+      background: linear-gradient(90deg, #10233e, #14325a);
+      color: #f7e6b5;
+      font-weight: 800;
+      box-shadow: none !important;
+    }
+
+    .accordion-button:not(.collapsed) {
+      background: linear-gradient(90deg, #14325a, #b22222);
+      color: #f7e6b5;
+    }
+
+    .accordion-button::after {
+      filter: brightness(0) invert(1);
+    }
+
+    .accordion-body {
+      background-color: #10233e;
+      color: #f7e6b5;
+    }
+
+    .offcanvas {
+      background: linear-gradient(180deg, #0b1730 0%, #10233e 100%);
+      color: #f7e6b5;
+      border-left: 4px solid #d4b06a;
+    }
+
+    .offcanvas-header {
+      border-bottom: 2px solid rgba(212, 176, 106, 0.35);
+    }
+
+    .offcanvas-title {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .offcanvas .btn-close {
+      filter: invert(1);
+    }
+
+    footer {
+      background: linear-gradient(90deg, #0b1730, #14325a) !important;
+      border-top: 4px solid #d4b06a;
+    }
+
+    #games {
+      background-color: #0d1d33 !important;
+    }
+
+    #add-game {
+      background: linear-gradient(180deg, #10233e 0%, #0b1730 100%);
+    }
+
+    #player-guide {
+      background-color: #0d1d33;
+    }
+
+    .form-control,
+    .form-select {
+      border-radius: 14px;
+      border: 2px solid #b89a5b;
+      padding: 0.8rem 0.9rem;
+      background-color: #f7f1df;
+      color: #0b1730;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+      border-color: #d4b06a;
+      box-shadow: 0 0 0 0.2rem rgba(212, 176, 106, 0.2);
+    }
+
+    .form-label {
+      font-weight: 800;
+      color: #f7e6b5;
+    }
+
+    .form-range::-webkit-slider-thumb {
+      background: #b22222;
+    }
+
+    .form-range::-moz-range-thumb {
+      background: #b22222;
+      border: none;
+    }
+
+    .pixel-pill {
+      display: inline-block;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.65rem;
+      line-height: 1.8;
+      background: #f7e6b5;
+      color: #0b1730;
+      border: 3px solid #d4b06a;
+      border-radius: 14px;
+      padding: 0.45rem 0.8rem;
+      box-shadow: 0 4px 0 rgba(0,0,0,0.14);
+      margin-bottom: 1rem;
+    }
+
+    .retro-subtitle {
+      max-width: 760px;
+      margin: 0 auto 2rem auto;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #f7e6b5;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .guide-list li {
+      margin-bottom: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      .carousel-item img {
+        height: 260px;
+      }
+
+      .navbar-brand {
+        font-size: 0.8rem;
+      }
+
+      .hero-title {
+        line-height: 1.5;
+      }
+
+      .carousel-caption {
+        position: static;
+        margin-top: 0.5rem;
+        background: #10233e;
+      }
+    }
+  </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold" href="#">GameVault</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="nav">
+      <ul class="navbar-nav ms-auto align-items-lg-center">
+        <li class="nav-item"><a class="nav-link" href="#games">Now Playing</a></li>
+        <li class="nav-item"><a class="nav-link" href="#add-game">Library Manager</a></li>
+        <li class="nav-item"><a class="nav-link" href="#player-guide">Player Guide</a></li>
+        <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+          <button class="btn btn-outline-light btn-sm" type="button" data-bs-toggle="offcanvas" data-bs-target="#vaultPanel">
+            Quick Guide
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container-fluid hero-banner text-center py-5">
+  <h1 class="hero-title mb-3">GameVault Tracker</h1>
+  <p class="lead mb-3">Track your current games, monitor your progress, and keep your collection organized with GameVault Tracker!</p>
+  <div class="d-flex justify-content-center gap-2 flex-wrap">
+    <button class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#infoModal">View Library Features</button>
+    <button class="btn btn-outline-light mt-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#vaultPanel">Open Quick Guide</button>
+  </div>
+</div>
+
+<div class="container-fluid mt-4">
+  <div class="carousel-shell">
+    <div id="gameVaultCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+      <div class="carousel-indicators">
+        <button type="button" data-bs-target="#gameVaultCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#gameVaultCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#gameVaultCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+      </div>
+
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img src="images/smashmural.png" class="d-block w-100" alt="Super Smash Bros mural">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>Build Your Rotation</h5>
+            <p>Keep your current lineup clean and organized using our progress tracking system.</p>
+          </div>
+        </div>
+
+        <div class="carousel-item">
+          <img src="images/mario.png" class="d-block w-100" alt="mario banner image">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>Track Progress Clearly</h5>
+            <p>See where each title stands with readable status badges, notes, and progress bars.</p>
+          </div>
+        </div>
+
+        <div class="carousel-item">
+          <img src="images/zelda.jpg" class="d-block w-100" alt="Zelda banner image">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>Organize the Backlog</h5>
+            <p>Manage what you are playing now and what is coming next in one clean interface.</p>
+          </div>
+        </div>
+      </div>
+
+      <button class="carousel-control-prev" type="button" data-bs-target="#gameVaultCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#gameVaultCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="games" class="container-fluid py-5">
+  <div class="container text-center">
+    <h2 class="fw-bold position-relative d-inline-block mb-4 section-title">
+      Currently Playing
+      <span class="d-block mt-2"></span>
+    </h2>
+
+    <p class="retro-subtitle">See your active games at a glance with status labels, quick notes, and progress bars that make your current rotation easy to manage.</p>
+
+    <div id="gameCardContainer" class="row">
+      <div class="col-md-4 mb-4 game-card">
+        <div class="card h-100 shadow-sm">
+          <img src="images/elden_ring.jpg" class="card-img-top game-cover" alt="Elden Ring image">
+          <div class="card-body">
+            <div class="pixel-pill">Quest Log</div>
+            <h5 class="card-title">Elden Ring <span class="badge bg-success">Playing</span></h5>
+            <p class="card-text mb-2">Current focus: exploration and main bosses.</p>
+            <div class="progress mb-3">
+              <div class="progress-bar bg-success" role="progressbar" style="width: 65%">65%</div>
+            </div>
+            <div class="card-actions">
+              <button class="btn btn-info" data-bs-toggle="tooltip" title="Open-world RPG with exploration and boss progression">Info</button>
+              <button class="btn btn-danger" type="button" onclick="deleteGame(this, 'Elden Ring')">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-4 game-card">
+        <div class="card h-100 shadow-sm">
+          <img src="images/spiderman2.jpg" class="card-img-top game-cover" alt="Spider-Man 2 image">
+          <div class="card-body">
+            <div class="pixel-pill">Next Up</div>
+            <h5 class="card-title">Spider-Man 2 <span class="badge bg-warning text-dark">Backlog</span></h5>
+            <p class="card-text mb-2">Planned next after current game is finished.</p>
+            <div class="progress mb-3">
+              <div class="progress-bar bg-warning text-dark" role="progressbar" style="width: 20%">20%</div>
+            </div>
+            <div class="card-actions">
+              <button class="btn btn-info" data-bs-toggle="tooltip" title="Story-driven action game with open-city traversal">Info</button>
+              <button class="btn btn-danger" type="button" onclick="deleteGame(this, 'Spider-Man 2')">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-4 game-card">
+        <div class="card h-100 shadow-sm">
+          <img src="images/valorant.jpg" class="card-img-top game-cover" alt="Valorant image">
+          <div class="card-body">
+            <div class="pixel-pill">Clear Save</div>
+            <h5 class="card-title">Valorant <span class="badge bg-primary">Completed</span></h5>
+            <p class="card-text mb-2">Finished the current season goals.</p>
+            <div class="progress mb-3">
+              <div class="progress-bar bg-primary" role="progressbar" style="width: 100%">100%</div>
+            </div>
+            <div class="card-actions">
+              <button class="btn btn-info" data-bs-toggle="tooltip" title="Competitive tactical shooter focused on team play">Info</button>
+              <button class="btn btn-danger" type="button" onclick="deleteGame(this, 'Valorant')">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="add-game" class="container-fluid py-5">
+  <div class="container">
+    <div class="text-center">
+      <h2 class="text-center fw-bold mb-4 section-title">
+        Manage Your Library
+        <span class="d-block mt-2"></span>
+      </h2>
+      <p class="retro-subtitle">Add a title, choose a status, set your progress, and keep your active games organized in one place.</p>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="panel-card">
+          <div class="card-body p-4">
+            <form id="gameForm">
+              <div class="mb-3">
+                <label for="gameTitle" class="form-label">Game Title</label>
+                <input type="text" class="form-control" id="gameTitle" placeholder="Enter a game title" required>
+              </div>
+
+              <div class="mb-3">
+                <label for="gameStatus" class="form-label">Status</label>
+                <select class="form-select" id="gameStatus" required>
+                  <option value="">Choose a status</option>
+                  <option value="Playing">Playing</option>
+                  <option value="Backlog">Backlog</option>
+                  <option value="Completed">Completed</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label for="gameProgress" class="form-label">Progress Percentage</label>
+                <input type="range" class="form-range" id="gameProgress" min="0" max="100" value="50" oninput="document.getElementById('progressValue').textContent = this.value + '%'">
+                <div class="text-end"><span id="progressValue" class="fw-bold">50%</span></div>
+              </div>
+
+              <div class="mb-3">
+                <label for="gameNotes" class="form-label">Short Note</label>
+                <textarea class="form-control" id="gameNotes" rows="3" placeholder="Example: working on side quests, ranked matches, or final chapter"></textarea>
+              </div>
+
+              <div class="mb-4">
+                <label for="gameImage" class="form-label">Cover Image URL</label>
+                <input type="text" class="form-control" id="gameImage" placeholder="Paste an image URL or leave blank for placeholder image">
+              </div>
+
+              <div class="d-flex gap-2 flex-wrap">
+                <button type="submit" class="btn btn-primary">Add Game</button>
+                <button type="reset" class="btn btn-outline-secondary">Clear Form</button>
+                <button type="button" class="btn btn-outline-dark" data-bs-toggle="tooltip" title="Update your current library with a new title, status, and progress entry">Library Help</button>
+                <button type="button" class="btn btn-outline-light" data-bs-toggle="offcanvas" data-bs-target="#vaultPanel">Tips Panel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="player-guide" class="container-fluid py-5">
+  <div class="container">
+    <div class="text-center">
+      <h2 class="text-center fw-bold mb-4 section-title">
+        Player Guide
+        <span class="d-block mt-2"></span>
+      </h2>
+      <p class="retro-subtitle">Use the accordion below for quick help with organizing your collection and understanding what each tracker section does.</p>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-9">
+        <div class="accordion" id="gameVaultAccordion">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                How do I add a new game to my tracker?
+              </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#gameVaultAccordion">
+              <div class="accordion-body">
+                Open the library manager section, enter a game title, choose a status, set the progress percentage, and add an optional note or image URL. When you submit the form, a new game card is added instantly to your tracker.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                What do the status labels mean?
+              </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#gameVaultAccordion">
+              <div class="accordion-body">
+                Playing means the title is in your current rotation, Backlog means you plan to play it later, and Completed means you finished your current goals for that game. These labels also change the badge and progress bar colors for quick visual organization.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingThree">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                Why use GameVault instead of a simple list?
+              </button>
+            </h2>
+            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#gameVaultAccordion">
+              <div class="accordion-body">
+                GameVault combines images, notes, status badges, and progress bars, all in one responsive layout. It gives you a cleaner and more engaging way to manage your collection than a simple text list.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="infoModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>GameVault Features</h5>
+        <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        GameVault helps players organize their current games, monitor completion progress, and keep their personal library easy to manage through a clean and responsive interface.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="vaultPanel" aria-labelledby="vaultPanelLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="vaultPanelLabel">Vault Quick Guide</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <p class="mb-3">Use this panel for a fast overview of how to get the most out of GameVault.</p>
+    <ul class="guide-list ps-3">
+      <li><strong>Browse the banner:</strong> Rotate through featured images at the top of the page.</li>
+      <li><strong>Track your games:</strong> Review your current titles in the Currently Playing section.</li>
+      <li><strong>Update your library:</strong> Add new games with a title, status, progress percentage, note, and optional cover image.</li>
+      <li><strong>Use the guide section:</strong> Open the accordion answers for extra help and app tips.</li>
+    </ul>
+    <button class="btn btn-primary mt-2" data-bs-dismiss="offcanvas">Back to Library</button>
+  </div>
+</div>
+
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+  <div id="liveToast" class="toast" role="alert">
+    <div class="toast-header">
+      <strong class="me-auto">GameVault</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+    </div>
+    <div class="toast-body" id="toastMessage">
+      Your library has been updated.
+    </div>
+  </div>
+</div>
+
+<footer class="text-white text-center py-4 mt-auto">
+  GameVault Tracker © 2026
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+  tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl);
+  });
+
+  var toastElement = document.getElementById('liveToast');
+  var liveToast = new bootstrap.Toast(toastElement);
+
+  function getStatusBadge(status) {
+    if (status === 'Playing') {
+      return 'bg-success';
+    }
+    if (status === 'Backlog') {
+      return 'bg-warning text-dark';
+    }
+    return 'bg-primary';
+  }
+
+  function getProgressBar(status) {
+    if (status === 'Playing') {
+      return 'bg-success';
+    }
+    if (status === 'Backlog') {
+      return 'bg-warning text-dark';
+    }
+    return 'bg-primary';
+  }
+
+  function deleteGame(button, title) {
+    var gameCard = button.closest('.game-card');
+    if (gameCard) {
+      gameCard.remove();
+      document.getElementById('toastMessage').textContent = title + ' was removed from your library.';
+      liveToast.show();
+    }
+  }
+
+  document.getElementById('gameForm').addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    var title = document.getElementById('gameTitle').value.trim();
+    var status = document.getElementById('gameStatus').value;
+    var progress = document.getElementById('gameProgress').value;
+    var notes = document.getElementById('gameNotes').value.trim();
+    var image = document.getElementById('gameImage').value.trim();
+
+    if (!title || !status) {
+      return;
+    }
+
+    var imageSrc = image || 'https://via.placeholder.com/600x400/fff7df/2d6cdf?text=Game+Cover';
+    var badgeClass = getStatusBadge(status);
+    var progressClass = getProgressBar(status);
+    var safeNotes = notes || 'No additional notes have been added for this title.';
+
+    var labelText = 'Fresh Save';
+    if (status === 'Playing') {
+      labelText = 'Quest Log';
+    } else if (status === 'Backlog') {
+      labelText = 'Next Up';
+    } else if (status === 'Completed') {
+      labelText = 'Clear Save';
+    }
+
+    var cardHtml = `
+      <div class="col-md-4 mb-4 game-card">
+        <div class="card h-100 shadow-sm">
+          <img src="${imageSrc}" class="card-img-top game-cover" alt="User added game cover image">
+          <div class="card-body">
+            <div class="pixel-pill">${labelText}</div>
+            <h5 class="card-title">${title} <span class="badge ${badgeClass}">${status}</span></h5>
+            <p class="card-text mb-2">${safeNotes}</p>
+            <div class="progress mb-3">
+              <div class="progress-bar ${progressClass}" role="progressbar" style="width: ${progress}%">${progress}%</div>
+            </div>
+            <div class="card-actions">
+              <button class="btn btn-info" data-bs-toggle="tooltip" title="User-added game entry in the tracker">Info</button>
+              <button class="btn btn-danger" type="button" onclick="deleteGame(this, '${title.replace(/'/g, "\\'")}')">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('gameCardContainer').insertAdjacentHTML('afterbegin', cardHtml);
+
+    var newTooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    newTooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+
+    document.getElementById('toastMessage').textContent = title + ' was added to your library.';
+    liveToast.show();
+
+    document.getElementById('gameForm').reset();
+    document.getElementById('progressValue').textContent = '50%';
+  });
+</script>
+
+</body>
+</html>
